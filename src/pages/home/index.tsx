@@ -15,23 +15,19 @@ export function Home() {
   const [participantName, setParticipantName] = useState("");
 
   function handleParticipantAdd() {
-    
     if (!participantName.trim()) {
-       Alert.alert(
-        "Nome Inválido",
-        "Digite um nome de participante válido!"
-      );
+      Alert.alert("Nome Inválido", "Digite um nome de participante válido!");
       return setParticipantName("");
     }
 
-    if (participants.includes(participantName)) {
+    if (participants.includes(participantName.toLocaleLowerCase())) {
       return Alert.alert(
         "Participante Existente",
         "Já Existe Participante na Lista com esse Nome"
       );
     }
 
-    setParticipants((prevState) => [...prevState, participantName.trim()]);
+    setParticipants((prevState) => [...prevState, participantName.trim().toLocaleLowerCase()]);
     console.log(participantName);
     setParticipantName("");
   }
@@ -40,7 +36,10 @@ export function Home() {
     Alert.alert("Remover", `Deseja remover a participação do(a) ${name} ?`, [
       {
         text: "Sim",
-        onPress: () => Alert.alert("Deletado!"),
+        onPress: () =>
+          setParticipants((prevState) =>
+            prevState.filter((participant) => participant !== name)
+          ),
       },
       {
         text: "Não",
@@ -53,9 +52,15 @@ export function Home() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.eventName}>Nome do evento</Text>
+      <TextInput 
+      placeholder="Nome do Evento"
+      placeholderTextColor="#6B6B6B"
+      style={styles.eventName}></TextInput>
 
-      <Text style={styles.eventDate}>Sexta, 4 de Novembro de 2022.</Text>
+      <TextInput 
+      placeholder="Data do Evento"
+      placeholderTextColor="#6B6B6B"
+      style={styles.eventDate}></TextInput>
 
       <View style={styles.form}>
         <TextInput
